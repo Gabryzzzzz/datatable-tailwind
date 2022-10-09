@@ -1,6 +1,6 @@
 <script src="../../../node_modules/flowbite/dist/flowbite.js"></script>
 <div class="overflow-x-auto relative shadow-md sm:rounded-lg m-5 max-w-screen-xl">
-  <h2 class="text-3xl m-3 font-medium ">{{table_title}}</h2>
+  <h2 class="text-3xl m-3 font-medium ">{{tw_global.tw_config.table_title}}</h2>
   <div class="flex justify-between items-center pb-4">
 
     <!-- Dropdown menu -->
@@ -9,7 +9,8 @@
       <select [(ngModel)]="selected_order"
         (change)="this.c_data = order_by(selected_order);  PaginatorSearch(0); page_minus() " [id]="'order-by-' + id"
         class="block w-56 py-3 px-4 text-base text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option *ngFor="let header of headers; let i = index" [value]="header" (change)="selected_order = header">
+        <option *ngFor="let header of tw_global.tw_config.headers; let i = index" [value]="header"
+          (change)="selected_order = header">
           {{header | titlecase}}</option>
       </select>
 
@@ -34,17 +35,34 @@
   <table [id]="'dt-'+ id" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
-        <th *ngFor="let header of headers" scope="col" class="py-3 px-6">
+        <th *ngFor="let header of tw_global.tw_config.headers" scope="col" class="py-3 px-6 text-center">
           {{header}}
+        </th>
+        <th class="py-3 px-6 text-center"
+          *ngIf="tw_global.tw_config.actions.delete != false || tw_global.tw_config.actions.view != false || tw_global.tw_config.actions.edit != false">
+          Azioni
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let d of c_data"
+      <tr *ngFor="let d of c_data" (click)="tw_global.tw_events.clicked_row.emit(d)"
         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <th *ngFor="let r of d | keyvalue" (click)="clicked_row.emit(r.value)" scope="row"
-          class="py-4 px-6 font-medium text-gray-900 dark:text-white">
+        <th *ngFor="let r of d | keyvalue" scope="row" class="py-4 px-6 font-medium text-gray-900 dark:text-white">
           {{r.value}}
+        </th>
+        <th class="py-4 px-6 font-medium text-gray-900 dark:text-white"
+          *ngIf="tw_global.tw_config.actions.delete != false || tw_global.tw_config.actions.view != false || tw_global.tw_config.actions.edit != false">
+          <div class="text-center">
+            <p (click)="send_event_row('view', d)" role="button" class="text-blue-500 underline hover:text-blue-700" *ngIf="tw_global.tw_config.actions.view != false">
+              Dettagli
+            </p>
+            <p (click)="send_event_row('edit', d)" role="button" class="text-blue-500 underline hover:text-blue-700" *ngIf="tw_global.tw_config.actions.edit != false">
+              Modifica
+            </p>
+            <p (click)="send_event_row('delete', d)" role="button" class="text-blue-500 underline hover:text-blue-700" *ngIf="tw_global.tw_config.actions.delete != false">
+              Cancella
+            </p>
+          </div>
         </th>
       </tr>
     </tbody>
