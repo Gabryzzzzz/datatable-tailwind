@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import 'flowbite';
 import { Subject } from 'rxjs';
 
 export class pagination {
@@ -106,7 +105,6 @@ export class TwDtComponent implements OnInit {
 
   sort_function: any = (function (a: any, b: any, key: any) {
     // console.log("!(isNaN(a[key]) && isNaN(b[key]))", !(isNaN(a[key]) && isNaN(b[key])));
-
     if (!(isNaN(a[key]) && isNaN(b[key]))) {
       if (a[key] > b[key]) {
         return 1
